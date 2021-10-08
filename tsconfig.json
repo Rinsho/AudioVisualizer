@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "target": "ES6",
+        "module": "es6",
+        "outDir": "build"
+    },
+    "include": ["scripts/*"]
+}

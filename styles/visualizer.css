@@ -1,0 +1,116 @@
+﻿.no-list-style {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #222;
+    color: #777;
+    margin: 50px;
+}
+
+.canvas-border {
+    border-left: 5px inset #222;
+    margin-bottom: 10px;
+}
+
+.file-select > input[type="file"] {
+    display: none;
+}
+
+.file-select {
+    background-color: #222;
+    border: 3px solid #F90;
+    border-radius: 10%;
+    color: #F90;
+    padding: 0 5px;
+}
+    .file-select:hover {
+        background-color: #333;
+        cursor: pointer;
+    }
+
+.player-container {
+    color: #666;
+    margin: 10px 0 0 10px;
+}
+#player-play {
+    color: #F90;
+    background-color: #222;
+    border: 3px solid #F90;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+}
+    #player-play:hover {
+        background-color: #333;
+    }
+
+.progress {
+    display: inline-block;
+    margin: auto 10px;
+    background-color: #666;
+}
+
+.playback-progress {
+    width: 150px;
+    height: 5px;
+    margin-bottom: 2px;
+    margin-left: 10px;
+}
+
+.player-total-time {
+    margin-left: 5px;
+    margin-right: 10px;
+}
+
+.volume-control {
+    width: 50px;
+    height: 10px;
+    margin-left: 5px;
+}
+.progress-bar {
+    background-color: #F90;
+}
+
+input[type="range"] {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    display: inline-block;
+    margin: 0 10px;
+    width: 150px;
+    height: 10px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    background-color: #666;   
+}
+    input[type="range"]::-webkit-slider-runnable-track {
+        -webkit-appearance: none;        
+        background-color: #666;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        border: 1px solid #333;
+        border-radius: 0;
+        width: 5px;
+        background-color: #F90;
+    }
+    input[type="range"]::-moz-range-track {
+        -moz-appearance: none;
+        background-color: #666;
+    }
+    input[type="range"]::-moz-range-thumb {
+        -moz-appearance: none;
+        border: 1px solid #333;
+        border-radius: 0;
+        width: 5px;
+        background-color: #F90;
+    }
+
+.custom-slider-controls {
+    margin: 20px 0 20px 10px;
+}
+    .custom-slider-controls p {
+        margin-top: 5px;
+    }
