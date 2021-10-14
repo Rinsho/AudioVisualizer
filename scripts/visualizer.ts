@@ -3,10 +3,10 @@ import { Animator } from "./animator.js";
 import * as Controls from "./audiocontrols.js";
 
 (function () {
-    let audioSource = new AudioSource(new window.AudioContext());
+    let audioSource = new AudioSource(new window.AudioContext);
     let animator = new Animator(
         document.getElementById('visualizer-canvas') as HTMLCanvasElement, 
-        audioSource.PollData
+        audioSource.PollData.bind(audioSource)
     );
 
     Controls.SetupAnimator(audioSource, animator);
@@ -18,6 +18,8 @@ import * as Controls from "./audiocontrols.js";
 
     //Default values
     audioSource.Volume = 0.25;
-    audioSource.Smoothing = 0.7;
-     
+    (document.getElementsByClassName('smoothing-slider')[0] as HTMLInputElement).value = '60';
+    //API sucks and won't dispatch a change event for programmatic changes.
+    //If you want something done right, gotta do it yourself :P
+    (document.getElementsByClassName('smoothing-slider')[0] as HTMLInputElement).dispatchEvent(new Event('change'));
 })();

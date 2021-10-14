@@ -22,7 +22,7 @@ export function SetupVolumeBar(audioSource: AudioSource) {
         'volumeChanged', 
         (event: Event) => {
             let volume = (event.target as AudioSource).Volume;
-            volumeProgressBar.style.width = volume + '%';
+            volumeProgressBar.style.width = volume * 100 + '%';
         }
     );   
     volumeBar.addEventListener(
@@ -69,8 +69,7 @@ export function SetupSampleSmoothing(audioSource: AudioSource) {
     );
     smoothingSlider.addEventListener('change', (event: Event) => {
         let val = Number.parseInt((event.target as HTMLInputElement).value);
-        audioSource.Smoothing =  val / 100;    
-        
+        audioSource.Smoothing =  val / 100;
     });
 }
 

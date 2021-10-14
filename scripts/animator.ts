@@ -2,7 +2,7 @@
 export class Animator {
     private _cancellationToken: number = 0;
     public ZoomConstantX: number = 4;
-    public ZoomConstantY: number = 4;
+    public ZoomConstantY: number = 2;
 
     constructor(private _canvas: HTMLCanvasElement, private _GetData: () => Float32Array) { }
 
@@ -33,8 +33,8 @@ export class Animator {
                 //let fillHeight = data[i];
                 let barHeight = 
                     this.InterpolateValue(this.LinearToLog(i, 1, data.length), data) 
-                    * Math.pow(2, this.ZoomConstantY) 
-                    + 100 
+                    * Math.pow(2, this.ZoomConstantY)
+                    + 90
                     * Math.pow(2, this.ZoomConstantY);
                 let fillX = i * barWidth;
                 let fillY = this._canvas.height - barHeight;
@@ -42,7 +42,7 @@ export class Animator {
                 context.fillRect(fillX, fillY, fillWidth, barHeight);
             }
         }
-        this._cancellationToken = requestAnimationFrame(this.Draw);
+        this._cancellationToken = requestAnimationFrame(this.Draw.bind(this));
     }
 
     public Start(): void {

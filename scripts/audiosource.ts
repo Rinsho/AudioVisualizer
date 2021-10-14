@@ -6,21 +6,19 @@ export class AudioSource extends EventTarget {
     protected _source: MediaElementAudioSourceNode;
     protected _analyser: AnalyserNode;
 
-    private _volume: number = 100;
     public get Volume() {
-        return this._volume;
+        return this._source.mediaElement.volume;
     }
     public set Volume(volume: number) {
-        this._volume = volume;
+        this._source.mediaElement.volume = volume;
         this.dispatchEvent(new Event('volumeChanged'));
     }
 
-    private _smoothing: number = 50;
     public get Smoothing() {
-        return this._smoothing;
+        return this._analyser.smoothingTimeConstant;
     }
     public set Smoothing(smoothing: number) {
-        this._smoothing = smoothing;
+        this._analyser.smoothingTimeConstant = smoothing;
         this.dispatchEvent(new Event('smoothingChanged'));
     }
 
@@ -35,7 +33,6 @@ export class AudioSource extends EventTarget {
         this._source = _audioContext.createMediaElementSource(player);
         this._analyser = _audioContext.createAnalyser();
         this._analyser.fftSize = fftSize;
-        this._analyser.smoothingTimeConstant = this.Smoothing / 100;
         this._source.connect(this._analyser);
         this._analyser.connect(_audioContext.destination);
 

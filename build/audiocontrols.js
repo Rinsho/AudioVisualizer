@@ -14,7 +14,7 @@ export function SetupVolumeBar(audioSource) {
     let volumeBar = document.getElementsByClassName('volume-control')[0];
     audioSource.addEventListener('volumeChanged', (event) => {
         let volume = event.target.Volume;
-        volumeProgressBar.style.width = volume + '%';
+        volumeProgressBar.style.width = volume * 100 + '%';
     });
     volumeBar.addEventListener('click', (event) => {
         let mouseEvent = event;

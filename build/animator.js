@@ -4,7 +4,7 @@ export class Animator {
         this._GetData = _GetData;
         this._cancellationToken = 0;
         this.ZoomConstantX = 4;
-        this.ZoomConstantY = 4;
+        this.ZoomConstantY = 2;
     }
     LinearToLog(val, min, max) {
         let exp = (val - min) / (max - min);
@@ -29,7 +29,7 @@ export class Animator {
                 //let fillHeight = data[i];
                 let barHeight = this.InterpolateValue(this.LinearToLog(i, 1, data.length), data)
                     * Math.pow(2, this.ZoomConstantY)
-                    + 100
+                    + 90
                         * Math.pow(2, this.ZoomConstantY);
                 let fillX = i * barWidth;
                 let fillY = this._canvas.height - barHeight;
@@ -37,7 +37,7 @@ export class Animator {
                 context.fillRect(fillX, fillY, fillWidth, barHeight);
             }
         }
-        this._cancellationToken = requestAnimationFrame(this.Draw);
+        this._cancellationToken = requestAnimationFrame(this.Draw.bind(this));
     }
     Start() {
         this.Draw();

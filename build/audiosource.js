@@ -2,31 +2,28 @@ export class AudioSource extends EventTarget {
     constructor(_audioContext, fftSize = 8192) {
         super();
         this._audioContext = _audioContext;
-        this._volume = 100;
-        this._smoothing = 50;
         let player = document.createElement('audio');
         player.id = 'audio-player';
         this._source = _audioContext.createMediaElementSource(player);
         this._analyser = _audioContext.createAnalyser();
         this._analyser.fftSize = fftSize;
-        this._analyser.smoothingTimeConstant = this.Smoothing / 100;
         this._source.connect(this._analyser);
         this._analyser.connect(_audioContext.destination);
         player.addEventListener('ended', () => this.dispatchEvent(new Event('audioEnded')));
         player.addEventListener('timeupdate', () => this.dispatchEvent(new Event('playerProgress')));
     }
     get Volume() {
-        return this._volume;
+        return this._source.mediaElement.volume;
     }
     set Volume(volume) {
-        this._volume = volume;
+        this._source.mediaElement.volume = volume;
         this.dispatchEvent(new Event('volumeChanged'));
     }
     get Smoothing() {
-        return this._smoothing;
+        return this._analyser.smoothingTimeConstant;
     }
     set Smoothing(smoothing) {
-        this._smoothing = smoothing;
+        this._analyser.smoothingTimeConstant = smoothing;
         this.dispatchEvent(new Event('smoothingChanged'));
     }
     get IsPlaying() {
