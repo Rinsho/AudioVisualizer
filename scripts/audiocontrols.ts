@@ -1,5 +1,5 @@
-import { Animator } from "./animator";
-import { AudioSource } from "./audiosource";
+import { Animator } from "./animator.js";
+import { AudioSource } from "./audiosource.js";
 
 function FormatTime(seconds: number) {
         seconds = Math.round(seconds);
@@ -64,7 +64,7 @@ export function SetupSampleSmoothing(audioSource: AudioSource) {
         'smoothingChanged',
         (event: Event) => {
             let val = (event.target as AudioSource).Smoothing;
-            smoothingDisplay.textContent = val + '%';   
+            smoothingDisplay.textContent = val * 100 + '%';   
         }
     );
     smoothingSlider.addEventListener('change', (event: Event) => {

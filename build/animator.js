@@ -1,17 +1,16 @@
-
 export class Animator {
-    private _cancellationToken: number = 0;
-    public ZoomConstantX: number = 4;
-    public ZoomConstantY: number = 4;
-
-    constructor(private _canvas: HTMLCanvasElement, private _GetData: () => Float32Array) { }
-
-    private LinearToLog(val: number, min: number, max: number) {
-        let exp = (val - min) / (max - min);
-        return min * Math.pow(max/min, this.ZoomConstantX * exp);
+    constructor(_canvas, _GetData) {
+        this._canvas = _canvas;
+        this._GetData = _GetData;
+        this._cancellationToken = 0;
+        this.ZoomConstantX = 4;
+        this.ZoomConstantY = 4;
     }
-
-    private InterpolateValue(index: number, array: Float32Array) {
+    LinearToLog(val, min, max) {
+        let exp = (val - min) / (max - min);
+        return min * Math.pow(max / min, this.ZoomConstantX * exp);
+    }
+    InterpolateValue(index, array) {
         let lowIndex = Math.floor(index);
         let highIndex = Math.ceil(index);
         let lowValue = array[lowIndex];
@@ -19,23 +18,19 @@ export class Animator {
         let scalingFactor = (index - lowIndex) / (highIndex - lowIndex);
         return lowValue + (highValue - lowValue) * scalingFactor;
     }
-
-    private Draw(): void {
+    Draw() {
         let context = this._canvas.getContext('2d');
-        if (context)
-        {
+        if (context) {
             let data = this._GetData();
             context.clearRect(0, 0, this._canvas.width, this._canvas.height);
             let barWidth = (this._canvas.width / data.length) * 2.5;
-            for (let i = 1; i < data.length / this.ZoomConstantX; i++)
-            { 
+            for (let i = 1; i < data.length / this.ZoomConstantX; i++) {
                 let fillWidth = barWidth;
                 //let fillHeight = data[i];
-                let barHeight = 
-                    this.InterpolateValue(this.LinearToLog(i, 1, data.length), data) 
-                    * Math.pow(2, this.ZoomConstantY) 
-                    + 100 
-                    * Math.pow(2, this.ZoomConstantY);
+                let barHeight = this.InterpolateValue(this.LinearToLog(i, 1, data.length), data)
+                    * Math.pow(2, this.ZoomConstantY)
+                    + 100
+                        * Math.pow(2, this.ZoomConstantY);
                 let fillX = i * barWidth;
                 let fillY = this._canvas.height - barHeight;
                 context.fillStyle = '#F90';
@@ -44,12 +39,10 @@ export class Animator {
         }
         this._cancellationToken = requestAnimationFrame(this.Draw);
     }
-
-    public Start(): void {
+    Start() {
         this.Draw();
     }
-
-    public Stop(): void {
+    Stop() {
         if (this._cancellationToken !== 0)
             cancelAnimationFrame(this._cancellationToken);
     }

@@ -1,6 +1,6 @@
-﻿import { AudioSource } from "./audiosource";
-import { Animator } from "./animator";
-import * as Controls from "./audiocontrols";
+﻿import { AudioSource } from "./audiosource.js";
+import { Animator } from "./animator.js";
+import * as Controls from "./audiocontrols.js";
 
 (function () {
     let audioSource = new AudioSource(new window.AudioContext());
