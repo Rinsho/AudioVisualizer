@@ -15,23 +15,23 @@
         <canvas id="visualizer-canvas" width="1024" height="275"></canvas>
         <div class="player-container">
             <input id="player-play" type="button" value=">" />
-            <div class="progress playback-progress">
+            <div class="progress playback-progress" id="playback-progress">
                 <div class="progress-bar"></div>
             </div>
             <label class="player-total-time">00:00</label>
             <i class="fa fa-volume-up"></i>
-            <div class="progress volume-control">
+            <div class="progress volume-control" id="volume-control">
                 <div class="progress-bar"></div>
             </div>
             <div class="custom-slider-controls">
                 <div>
                     <p>Domain Smoothing (disabled atm)</p>
-                    <input type="range" min="0" max="10" step="1" class="domain-slider" />
+                    <input type="range" min="0" max="10" step="1" class="domain-slider" id="domain-slider" />
                     <label class="domain-display">0</label>
                 </div>
                 <div>
                     <p>Sampling Normalization</p>
-                    <input type="range" min="0" max="100" step="1" class="smoothing-slider" />
+                    <input type="range" min="0" max="100" step="1" class="smoothing-slider" id="smoothing-slider" />
                     <label class="smoothing-display">0 %</label>
                 </div>
             </div>

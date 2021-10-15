@@ -10,8 +10,8 @@ export function SetupAnimator(audioSource, animator) {
     audioSource.addEventListener('audioEnded', () => animator.Stop());
 }
 export function SetupVolumeBar(audioSource) {
-    let volumeProgressBar = document.querySelector('.volume-control > .progress-bar');
-    let volumeBar = document.getElementsByClassName('volume-control')[0];
+    let volumeProgressBar = document.querySelector('#volume-control > .progress-bar');
+    let volumeBar = document.getElementById('volume-control');
     audioSource.addEventListener('volumeChanged', (event) => {
         let volume = event.target.Volume;
         volumeProgressBar.style.width = volume * 100 + '%';
@@ -38,8 +38,8 @@ export function SetupPlayButton(audioSource) {
     });
 }
 export function SetupSampleSmoothing(audioSource) {
-    let smoothingSlider = document.getElementsByClassName('smoothing-slider')[0];
-    let smoothingDisplay = document.getElementsByClassName('smoothing-display')[0];
+    let smoothingSlider = document.getElementById('smoothing-slider');
+    let smoothingDisplay = document.querySelector('#smoothing-slider + .smoothing-display');
     audioSource.addEventListener('smoothingChanged', (event) => {
         let val = event.target.Smoothing;
         smoothingDisplay.textContent = val * 100 + '%';
@@ -50,16 +50,16 @@ export function SetupSampleSmoothing(audioSource) {
     });
 }
 export function SetupDomainSmoothing(audioSource) {
-    let domainSlider = document.getElementsByClassName('domain-slider')[0];
-    let domainDisplay = document.getElementsByClassName('domain-display')[0];
+    let domainSlider = document.getElementById('domain-slider');
+    let domainDisplay = document.querySelector('#domain-slider + .domain-display');
     domainSlider.addEventListener('change', (event) => {
         let val = Number.parseInt(event.target.value);
         //What should be responsible for the domain?
     });
 }
 export function SetupProgressBar(audioSource) {
-    let playerProgressBar = document.querySelector('.playback-progress > .progress-bar');
-    let playerProgressDisplay = document.getElementsByClassName('player-total-time')[0];
+    let playerProgressBar = document.querySelector('#playback-progress > .progress-bar');
+    let playerProgressDisplay = document.querySelector('#playback-progress + .player-total-time');
     audioSource.addEventListener('playerProgress', (event) => {
         let audio = event.target;
         let currentTime = audio.GetCurrentTime();

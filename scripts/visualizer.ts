@@ -18,8 +18,10 @@ import * as Controls from "./audiocontrols.js";
 
     //Default values
     audioSource.Volume = 0.25;
-    (document.getElementsByClassName('smoothing-slider')[0] as HTMLInputElement).value = '60';
+
+    let smoothingSlider = document.getElementById('smoothing-slider') as HTMLInputElement;
+    smoothingSlider.value = '60';
     //API sucks and won't dispatch a change event for programmatic changes.
     //If you want something done right, gotta do it yourself :P
-    (document.getElementsByClassName('smoothing-slider')[0] as HTMLInputElement).dispatchEvent(new Event('change'));
+    smoothingSlider.dispatchEvent(new Event('change'));
 })();

@@ -15,8 +15,8 @@ export function SetupAnimator(audioSource: AudioSource, animator: Animator) {
 }
 
 export function SetupVolumeBar(audioSource: AudioSource) {
-    let volumeProgressBar = document.querySelector('.volume-control > .progress-bar') as HTMLDivElement;
-    let volumeBar = document.getElementsByClassName('volume-control')[0] as HTMLDivElement;
+    let volumeProgressBar = document.querySelector('#volume-control > .progress-bar') as HTMLDivElement;
+    let volumeBar = document.getElementById('volume-control') as HTMLDivElement;
 
     audioSource.addEventListener(
         'volumeChanged', 
@@ -56,8 +56,8 @@ export function SetupPlayButton(audioSource: AudioSource) {
 }
 
 export function SetupSampleSmoothing(audioSource: AudioSource) {
-    let smoothingSlider = document.getElementsByClassName('smoothing-slider')[0] as HTMLInputElement;
-    let smoothingDisplay = document.getElementsByClassName('smoothing-display')[0] as HTMLLabelElement;
+    let smoothingSlider = document.getElementById('smoothing-slider') as HTMLInputElement;
+    let smoothingDisplay = document.querySelector('#smoothing-slider + .smoothing-display') as HTMLLabelElement;
 
     audioSource.addEventListener(
         'smoothingChanged',
@@ -73,8 +73,8 @@ export function SetupSampleSmoothing(audioSource: AudioSource) {
 }
 
 export function SetupDomainSmoothing(audioSource: AudioSource) {
-    let domainSlider = document.getElementsByClassName('domain-slider')[0] as HTMLInputElement;
-    let domainDisplay = document.getElementsByClassName('domain-display')[0] as HTMLLabelElement;
+    let domainSlider = document.getElementById('domain-slider') as HTMLInputElement;
+    let domainDisplay = document.querySelector('#domain-slider + .domain-display') as HTMLLabelElement;
 
     domainSlider.addEventListener(
         'change', 
@@ -87,8 +87,8 @@ export function SetupDomainSmoothing(audioSource: AudioSource) {
 }
 
 export function SetupProgressBar(audioSource: AudioSource) {
-    let playerProgressBar = document.querySelector('.playback-progress > .progress-bar') as HTMLDivElement;
-    let playerProgressDisplay = document.getElementsByClassName('player-total-time')[0] as HTMLLabelElement;
+    let playerProgressBar = document.querySelector('#playback-progress > .progress-bar') as HTMLDivElement;
+    let playerProgressDisplay = document.querySelector('#playback-progress + .player-total-time') as HTMLLabelElement;
 
     audioSource.addEventListener(
         'playerProgress',
