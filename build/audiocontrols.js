@@ -18,8 +18,7 @@ export function SetupVolumeBar(audioSource) {
     });
     volumeBar.addEventListener('click', (event) => {
         let mouseEvent = event;
-        let volumeControl = event.target;
-        audioSource.Volume = (mouseEvent.clientX - volumeControl.offsetLeft) / volumeControl.offsetWidth;
+        audioSource.Volume = (mouseEvent.clientX - volumeBar.offsetLeft) / volumeBar.offsetWidth;
     });
 }
 export function SetupPlayButton(audioSource) {

@@ -29,8 +29,7 @@ export function SetupVolumeBar(audioSource: AudioSource) {
         'click', 
         (event: Event) => {
             let mouseEvent = event as MouseEvent;
-            let volumeControl = event.target as HTMLDivElement;
-            audioSource.Volume = (mouseEvent.clientX - volumeControl.offsetLeft) / volumeControl.offsetWidth;
+            audioSource.Volume = (mouseEvent.clientX - volumeBar.offsetLeft) / volumeBar.offsetWidth;
         }
     );
 }
