@@ -9,7 +9,7 @@ function FormatTime(seconds: number) {
 }
 
 export function SetupAnimator(audioSource: AudioSource, animator: Animator) {
-    let sampling = () => animator.Start(ExponentialSampling);
+    let animatorSampling = () => animator.Start(ExponentialSampling);
 
     let samplingSelection = document.getElementById('sampling-function') as HTMLSelectElement;
     samplingSelection.addEventListener(
@@ -17,22 +17,22 @@ export function SetupAnimator(audioSource: AudioSource, animator: Animator) {
         (event: Event) => {
             let selection = event.target as HTMLSelectElement;
             let option = selection.selectedOptions[0];
-            audioSource.removeEventListener('audioStarted', sampling);
+            audioSource.removeEventListener('audioStarted', animatorSampling);
             switch (option.value)
             {
                 case 'linear':
-                    sampling = () => animator.Start(LinearSampling);
+                    animatorSampling = () => animator.Start(LinearSampling);
                     break;
                 default:
-                    sampling = () => animator.Start(ExponentialSampling);
+                    animatorSampling = () => animator.Start(ExponentialSampling);
                     break;
             }           
-            audioSource.addEventListener('audioStarted', sampling);
+            audioSource.addEventListener('audioStarted', animatorSampling);
             audioSource.Play(); //triggers audioStarted event
         }
     );
     
-    audioSource.addEventListener('audioStarted', sampling);
+    audioSource.addEventListener('audioStarted', animatorSampling);
     audioSource.addEventListener('audioPaused', () => animator.Stop());
     audioSource.addEventListener('audioEnded', () => animator.Stop());
 }

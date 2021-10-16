@@ -66,6 +66,7 @@ export class Animator extends EventTarget {
     }
 
     public Start(transform: SamplingTransform): void {
+        this.Stop();
         this.Draw(transform);
     }
 

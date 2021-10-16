@@ -54,6 +54,7 @@ export class Animator extends EventTarget {
         this._cancellationToken = requestAnimationFrame(this.Draw.bind(this, transform));
     }
     Start(transform) {
+        this.Stop();
         this.Draw(transform);
     }
     Stop() {
