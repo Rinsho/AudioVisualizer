@@ -61,4 +61,8 @@ export class AudioSource extends EventTarget {
         this._analyser.getFloatFrequencyData(data);
         return data;
     }
+    Seek(seconds) {
+        if (seconds >= 0 && seconds < this.GetDuration())
+            this._source.mediaElement.currentTime = seconds;
+    }
 }

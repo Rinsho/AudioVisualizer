@@ -28,11 +28,11 @@ export function SetupAnimator(audioSource, animator) {
     audioSource.addEventListener('audioEnded', () => animator.Stop());
 }
 export function SetupVolumeBar(audioSource) {
-    let volumeProgressBar = document.querySelector('#volume-control > .progress-bar');
+    let currentVolumeBar = document.querySelector('#volume-control > .progress-bar');
     let volumeBar = document.getElementById('volume-control');
     audioSource.addEventListener('volumeChanged', (event) => {
         let volume = event.target.Volume;
-        volumeProgressBar.style.width = volume * 100 + '%';
+        currentVolumeBar.style.width = volume * 100 + '%';
     });
     volumeBar.addEventListener('click', (event) => {
         let mouseEvent = event;
@@ -78,14 +78,20 @@ export function SetupDomainSmoothing(animator) {
     });
 }
 export function SetupProgressBar(audioSource) {
-    let playerProgressBar = document.querySelector('#playback-progress > .progress-bar');
+    let playerProgressBar = document.getElementById('playback-progress');
+    let currentPlayerProgressBar = document.querySelector('#playback-progress > .progress-bar');
     let playerProgressDisplay = document.querySelector('#playback-progress + .player-total-time');
     audioSource.addEventListener('playerProgress', (event) => {
         let audio = event.target;
         let currentTime = audio.GetCurrentTime();
         let totalDuration = audio.GetDuration();
-        playerProgressBar.style.width = Math.floor((currentTime / totalDuration) * 100) + '%';
+        currentPlayerProgressBar.style.width = Math.floor((currentTime / totalDuration) * 100) + '%';
         playerProgressDisplay.textContent = FormatTime(currentTime);
+    });
+    playerProgressBar.addEventListener('click', (event) => {
+        let mouseEvent = event;
+        let targetPercent = (mouseEvent.clientX - playerProgressBar.offsetLeft) / playerProgressBar.offsetWidth;
+        audioSource.Seek(audioSource.GetDuration() * targetPercent);
     });
 }
 export function SetupFileChooser(audioSource) {

@@ -38,14 +38,14 @@ export function SetupAnimator(audioSource: AudioSource, animator: Animator) {
 }
 
 export function SetupVolumeBar(audioSource: AudioSource) {
-    let volumeProgressBar = document.querySelector('#volume-control > .progress-bar') as HTMLDivElement;
+    let currentVolumeBar = document.querySelector('#volume-control > .progress-bar') as HTMLDivElement;
     let volumeBar = document.getElementById('volume-control') as HTMLDivElement;
 
     audioSource.addEventListener(
         'volumeChanged', 
         (event: Event) => {
             let volume = (event.target as AudioSource).Volume;
-            volumeProgressBar.style.width = volume * 100 + '%';
+            currentVolumeBar.style.width = volume * 100 + '%';
         }
     );   
     volumeBar.addEventListener(
@@ -114,7 +114,8 @@ export function SetupDomainSmoothing(animator: Animator) {
 }
 
 export function SetupProgressBar(audioSource: AudioSource) {
-    let playerProgressBar = document.querySelector('#playback-progress > .progress-bar') as HTMLDivElement;
+    let playerProgressBar = document.getElementById('playback-progress') as HTMLDivElement;
+    let currentPlayerProgressBar = document.querySelector('#playback-progress > .progress-bar') as HTMLDivElement;
     let playerProgressDisplay = document.querySelector('#playback-progress + .player-total-time') as HTMLLabelElement;
 
     audioSource.addEventListener(
@@ -123,8 +124,16 @@ export function SetupProgressBar(audioSource: AudioSource) {
             let audio = event.target as AudioSource;
             let currentTime = audio.GetCurrentTime();
             let totalDuration = audio.GetDuration();
-            playerProgressBar.style.width = Math.floor((currentTime / totalDuration) * 100) + '%';
+            currentPlayerProgressBar.style.width = Math.floor((currentTime / totalDuration) * 100) + '%';
             playerProgressDisplay.textContent = FormatTime(currentTime);
+        }
+    );
+    playerProgressBar.addEventListener(
+        'click',
+        (event: Event) => {
+            let mouseEvent = event as MouseEvent;
+            let targetPercent = (mouseEvent.clientX - playerProgressBar.offsetLeft) / playerProgressBar.offsetWidth;
+            audioSource.Seek(audioSource.GetDuration() * targetPercent);
         }
     );
 }
