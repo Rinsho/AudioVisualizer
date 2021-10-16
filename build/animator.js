@@ -28,14 +28,14 @@ export class Animator extends EventTarget {
         this._GetData = _GetData;
         this._cancellationToken = 0;
         this.ZoomConstantY = 2;
-        this._domainSmoothing = 0;
+        this._rangeOffset = 90;
     }
-    get DomainSmoothing() {
-        return this._domainSmoothing;
+    get RangeOffset() {
+        return this._rangeOffset;
     }
-    set DomainSmoothing(domain) {
-        this._domainSmoothing = domain;
-        this.dispatchEvent(new Event('domainChanged'));
+    set RangeOffset(rangeOffset) {
+        this._rangeOffset = rangeOffset;
+        this.dispatchEvent(new Event('rangeOffsetChanged'));
     }
     Draw(transform) {
         let context = this._canvas.getContext('2d');
@@ -45,7 +45,7 @@ export class Animator extends EventTarget {
             context.fillStyle = '#F90';
             let barWidth = this._canvas.width / data.length;
             for (let i = 1; i < data.length; i++) {
-                let barHeight = (transform(i, data) + 90) * Math.pow(2, this.ZoomConstantY);
+                let barHeight = (transform(i, data) + this.RangeOffset) * Math.pow(2, this.ZoomConstantY);
                 let fillX = i * barWidth;
                 let fillY = this._canvas.height - barHeight;
                 context.fillRect(fillX, fillY, barWidth, barHeight);

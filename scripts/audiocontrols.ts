@@ -95,20 +95,20 @@ export function SetupSampleSmoothing(audioSource: AudioSource) {
     });
 }
 
-export function SetupDomainSmoothing(animator: Animator) {
-    let domainSlider = document.getElementById('domain-slider') as HTMLInputElement;
-    let domainDisplay = document.querySelector('#domain-slider + .domain-display') as HTMLLabelElement;
+export function SetupRangeOffset(animator: Animator) {
+    let rangeOffsetSlider = document.getElementById('range-offset-slider') as HTMLInputElement;
+    let rangeOffsetDisplay = document.querySelector('#range-offset-slider + .range-offset-display') as HTMLLabelElement;
 
     animator.addEventListener(
-        'domainChanged',
+        'rangeOffsetChanged',
         (event: Event) => {
-            domainDisplay.textContent = '' + (event.target as Animator).DomainSmoothing;
+            rangeOffsetDisplay.textContent = '' + (event.target as Animator).RangeOffset;
         }
     );
-    domainSlider.addEventListener(
+    rangeOffsetSlider.addEventListener(
         'change', 
         (event: Event) => {
-            animator.DomainSmoothing = Number.parseInt((event.target as HTMLInputElement).value);
+            animator.RangeOffset = Number.parseInt((event.target as HTMLInputElement).value);
         }
     );
 }

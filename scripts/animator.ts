@@ -33,13 +33,13 @@ export class Animator extends EventTarget {
     private _cancellationToken: number = 0;
     public ZoomConstantY: number = 2;
 
-    private _domainSmoothing: number = 0;
-    public get DomainSmoothing() {
-        return this._domainSmoothing;
+    private _rangeOffset: number = 90;
+    public get RangeOffset() {
+        return this._rangeOffset;
     }
-    public set DomainSmoothing(domain: number) {
-        this._domainSmoothing = domain;
-        this.dispatchEvent(new Event('domainChanged'));
+    public set RangeOffset(rangeOffset: number) {
+        this._rangeOffset = rangeOffset;
+        this.dispatchEvent(new Event('rangeOffsetChanged'));
     }
 
     constructor(private _canvas: HTMLCanvasElement, private _GetData: () => Float32Array) { 
@@ -56,7 +56,7 @@ export class Animator extends EventTarget {
             let barWidth = this._canvas.width / data.length;
             for (let i = 1; i < data.length; i++)
             {
-                let barHeight = (transform(i, data) + 90) * Math.pow(2, this.ZoomConstantY);
+                let barHeight = (transform(i, data) + this.RangeOffset) * Math.pow(2, this.ZoomConstantY);
                 let fillX = i * barWidth;
                 let fillY = this._canvas.height - barHeight;               
                 context.fillRect(fillX, fillY, barWidth, barHeight);

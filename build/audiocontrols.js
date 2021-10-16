@@ -67,14 +67,14 @@ export function SetupSampleSmoothing(audioSource) {
         audioSource.Smoothing = val / 100;
     });
 }
-export function SetupDomainSmoothing(animator) {
-    let domainSlider = document.getElementById('domain-slider');
-    let domainDisplay = document.querySelector('#domain-slider + .domain-display');
-    animator.addEventListener('domainChanged', (event) => {
-        domainDisplay.textContent = '' + event.target.DomainSmoothing;
+export function SetupRangeOffset(animator) {
+    let rangeOffsetSlider = document.getElementById('range-offset-slider');
+    let rangeOffsetDisplay = document.querySelector('#range-offset-slider + .range-offset-display');
+    animator.addEventListener('rangeOffsetChanged', (event) => {
+        rangeOffsetDisplay.textContent = '' + event.target.RangeOffset;
     });
-    domainSlider.addEventListener('change', (event) => {
-        animator.DomainSmoothing = Number.parseInt(event.target.value);
+    rangeOffsetSlider.addEventListener('change', (event) => {
+        animator.RangeOffset = Number.parseInt(event.target.value);
     });
 }
 export function SetupProgressBar(audioSource) {
