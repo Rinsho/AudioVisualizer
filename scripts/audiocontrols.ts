@@ -72,16 +72,20 @@ export function SetupSampleSmoothing(audioSource: AudioSource) {
     });
 }
 
-export function SetupDomainSmoothing(audioSource: AudioSource) {
+export function SetupDomainSmoothing(animator: Animator) {
     let domainSlider = document.getElementById('domain-slider') as HTMLInputElement;
     let domainDisplay = document.querySelector('#domain-slider + .domain-display') as HTMLLabelElement;
 
+    animator.addEventListener(
+        'domainChanged',
+        (event: Event) => {
+            domainDisplay.textContent = '' + (event.target as Animator).DomainSmoothing;
+        }
+    );
     domainSlider.addEventListener(
         'change', 
         (event: Event) => {
-            let val = Number.parseInt((event.target as HTMLInputElement).value);
-
-            //What should be responsible for the domain?
+            animator.DomainSmoothing = Number.parseInt((event.target as HTMLInputElement).value);
         }
     );
 }

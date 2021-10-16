@@ -1,10 +1,19 @@
-export class Animator {
+export class Animator extends EventTarget {
     constructor(_canvas, _GetData) {
+        super();
         this._canvas = _canvas;
         this._GetData = _GetData;
         this._cancellationToken = 0;
         this.ZoomConstantX = 1;
         this.ZoomConstantY = 2;
+        this._domainSmoothing = 0;
+    }
+    get DomainSmoothing() {
+        return this._domainSmoothing;
+    }
+    set DomainSmoothing(domain) {
+        this._domainSmoothing = domain;
+        this.dispatchEvent(new Event('domainChanged'));
     }
     LinearToExponentialIndexing(val, min, max) {
         let percentageOfRange = (val - min) / (max - min);
@@ -28,19 +37,17 @@ export class Animator {
         if (context) {
             let data = this._GetData();
             context.clearRect(0, 0, this._canvas.width, this._canvas.height);
-            let barWidth = (this._canvas.width / data.length);
+            let barWidth = this._canvas.width / data.length;
             for (let i = 1; i < data.length / this.ZoomConstantX; i++) {
-                let fillWidth = barWidth;
                 //down-scaled linear sampling for testing
                 //let barHeight = this.InterpolateValue((i * 2/3) + (1/3), data) * Math.pow(2, this.ZoomConstantY) + 90 * Math.pow(2, this.ZoomConstantY);
-                let barHeight = this.InterpolateValue(this.LinearToExponentialIndexing(i, 1, data.length), data)
-                    * Math.pow(2, this.ZoomConstantY)
-                    + 90
-                        * Math.pow(2, this.ZoomConstantY);
+                let barHeight = (this.InterpolateValue(this.LinearToExponentialIndexing(i, 1, data.length), data)
+                    + 90)
+                    * Math.pow(2, this.ZoomConstantY);
                 let fillX = i * barWidth;
                 let fillY = this._canvas.height - barHeight;
                 context.fillStyle = '#F90';
-                context.fillRect(fillX, fillY, fillWidth, barHeight);
+                context.fillRect(fillX, fillY, barWidth, barHeight);
             }
         }
         this._cancellationToken = requestAnimationFrame(this.Draw.bind(this));
