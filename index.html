@@ -9,7 +9,8 @@
     <script src="build/visualizer.js" type="module" defer></script>
 </head>
 <body>
-<h4>Work In Progress. Sampling currently tweaked for low-end frequencies.</h2>
+<h4>Work In Progress.</h4>
+<p>Sampling currently tweaked for best low-end frequency resolution.</p>
 <div id="visualizer-container">
     <div class="canvas-border">
         <canvas id="visualizer-canvas" width="1024" height="275"></canvas>
@@ -24,6 +25,13 @@
                 <div class="progress-bar"></div>
             </div>
             <div class="custom-slider-controls">
+                <div>
+                    <p><label for="sampling-function">Sampling:</label></p>
+                    <select name="sampling-function" id="sampling-function">
+                        <option value="linear">Standard</option>
+                        <option value="exponential" selected>Custom</option>
+                    </select>
+                </div>
                 <div>
                     <p>Domain Smoothing (disabled atm)</p>
                     <input type="range" min="0" max="10" step="1" class="domain-slider" id="domain-slider" />

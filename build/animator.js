@@ -1,10 +1,32 @@
+function InterpolateValue(index, array) {
+    let lowIndex = Math.floor(index);
+    let highIndex = Math.ceil(index);
+    let lowValue = array[lowIndex];
+    let highValue = array[highIndex];
+    let scalingFactor = highIndex === lowIndex ? 0 : (index - lowIndex) / (highIndex - lowIndex);
+    return lowValue + (highValue - lowValue) * scalingFactor;
+}
+function LinearToExponentialIndexing(val, min, max) {
+    let percentageOfRange = (val - min) / (max - min);
+    let rangeRatio = max / min;
+    return min * Math.pow(rangeRatio, percentageOfRange);
+}
+function LinearToLogarithmicIndexing(val, min, max) {
+    //A reflection of the exponential functional.
+    return min * ((max - min) * (Math.log2(val) / Math.log2(max / min)) + min);
+}
+export function ExponentialSampling(index, data) {
+    return InterpolateValue(LinearToExponentialIndexing(index, 1, data.length), data);
+}
+export function LinearSampling(index, data) {
+    return data[index];
+}
 export class Animator extends EventTarget {
     constructor(_canvas, _GetData) {
         super();
         this._canvas = _canvas;
         this._GetData = _GetData;
         this._cancellationToken = 0;
-        this.ZoomConstantX = 1;
         this.ZoomConstantY = 2;
         this._domainSmoothing = 0;
     }
@@ -15,45 +37,24 @@ export class Animator extends EventTarget {
         this._domainSmoothing = domain;
         this.dispatchEvent(new Event('domainChanged'));
     }
-    LinearToExponentialIndexing(val, min, max) {
-        let percentageOfRange = (val - min) / (max - min);
-        let rangeRatio = max / min;
-        return min * Math.pow(rangeRatio, percentageOfRange * this.ZoomConstantX);
-    }
-    LinearToLogarithmicIndexing(val, min, max) {
-        //A reflection of the exponential functional.
-        return min * (((max - min) / this.ZoomConstantX) * (Math.log2(val) / Math.log2(max / min)) + min);
-    }
-    InterpolateValue(index, array) {
-        let lowIndex = Math.floor(index);
-        let highIndex = Math.ceil(index);
-        let lowValue = array[lowIndex];
-        let highValue = array[highIndex];
-        let scalingFactor = highIndex === lowIndex ? 0 : (index - lowIndex) / (highIndex - lowIndex);
-        return lowValue + (highValue - lowValue) * scalingFactor;
-    }
-    Draw() {
+    Draw(transform) {
         let context = this._canvas.getContext('2d');
         if (context) {
             let data = this._GetData();
             context.clearRect(0, 0, this._canvas.width, this._canvas.height);
+            context.fillStyle = '#F90';
             let barWidth = this._canvas.width / data.length;
-            for (let i = 1; i < data.length / this.ZoomConstantX; i++) {
-                //down-scaled linear sampling for testing
-                //let barHeight = this.InterpolateValue((i * 2/3) + (1/3), data) * Math.pow(2, this.ZoomConstantY) + 90 * Math.pow(2, this.ZoomConstantY);
-                let barHeight = (this.InterpolateValue(this.LinearToExponentialIndexing(i, 1, data.length), data)
-                    + 90)
-                    * Math.pow(2, this.ZoomConstantY);
+            for (let i = 1; i < data.length; i++) {
+                let barHeight = (transform(i, data) + 90) * Math.pow(2, this.ZoomConstantY);
                 let fillX = i * barWidth;
                 let fillY = this._canvas.height - barHeight;
-                context.fillStyle = '#F90';
                 context.fillRect(fillX, fillY, barWidth, barHeight);
             }
         }
-        this._cancellationToken = requestAnimationFrame(this.Draw.bind(this));
+        this._cancellationToken = requestAnimationFrame(this.Draw.bind(this, transform));
     }
-    Start() {
-        this.Draw();
+    Start(transform) {
+        this.Draw(transform);
     }
     Stop() {
         if (this._cancellationToken !== 0)

@@ -1,3 +1,4 @@
+import { ExponentialSampling, LinearSampling } from "./animator.js";
 function FormatTime(seconds) {
     seconds = Math.round(seconds);
     let minutes = Math.floor(seconds / 60);
@@ -5,7 +6,24 @@ function FormatTime(seconds) {
     return (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
 }
 export function SetupAnimator(audioSource, animator) {
-    audioSource.addEventListener('audioStarted', () => animator.Start());
+    let sampling = () => animator.Start(ExponentialSampling);
+    let samplingSelection = document.getElementById('sampling-function');
+    samplingSelection.addEventListener('change', (event) => {
+        let selection = event.target;
+        let option = selection.selectedOptions[0];
+        audioSource.removeEventListener('audioStarted', sampling);
+        switch (option.value) {
+            case 'linear':
+                sampling = () => animator.Start(LinearSampling);
+                break;
+            default:
+                sampling = () => animator.Start(ExponentialSampling);
+                break;
+        }
+        audioSource.addEventListener('audioStarted', sampling);
+        audioSource.Play(); //triggers audioStarted event
+    });
+    audioSource.addEventListener('audioStarted', sampling);
     audioSource.addEventListener('audioPaused', () => animator.Stop());
     audioSource.addEventListener('audioEnded', () => animator.Stop());
 }

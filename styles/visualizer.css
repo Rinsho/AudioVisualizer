@@ -114,3 +114,7 @@ input[type="range"] {
     .custom-slider-controls p {
         margin-top: 5px;
     }
+
+#sampling-function {
+    margin-bottom: 10px;
+}

@@ -1,7 +1,36 @@
 
+export type SamplingTransform = (index: number, data: Float32Array) => number;
+
+function InterpolateValue(index: number, array: Float32Array) {
+    let lowIndex = Math.floor(index);
+    let highIndex = Math.ceil(index);
+    let lowValue = array[lowIndex];
+    let highValue = array[highIndex];
+    let scalingFactor = highIndex === lowIndex ? 0 : (index - lowIndex) / (highIndex - lowIndex);
+    return lowValue + (highValue - lowValue) * scalingFactor;
+}
+
+function LinearToExponentialIndexing(val: number, min: number, max: number) {
+    let percentageOfRange = (val - min) / (max - min);
+    let rangeRatio = max / min;
+    return min * Math.pow(rangeRatio, percentageOfRange);
+}
+
+function LinearToLogarithmicIndexing(val: number, min: number, max: number) {
+    //A reflection of the exponential functional.
+    return min * ((max - min) * (Math.log2(val) / Math.log2(max / min)) + min);
+}
+
+export function ExponentialSampling(index: number, data: Float32Array) {
+    return InterpolateValue(LinearToExponentialIndexing(index, 1, data.length), data);
+}
+
+export function LinearSampling(index: number, data: Float32Array) {
+    return data[index];
+}
+
 export class Animator extends EventTarget {
     private _cancellationToken: number = 0;
-    public ZoomConstantX: number = 1;
     public ZoomConstantY: number = 2;
 
     private _domainSmoothing: number = 0;
@@ -17,59 +46,27 @@ export class Animator extends EventTarget {
         super();
     }
 
-    private LinearToExponentialIndexing(val: number, min: number, max: number) {
-        let percentageOfRange = (val - min) / (max - min);
-        let rangeRatio = max / min;
-        return min * Math.pow(rangeRatio, percentageOfRange * this.ZoomConstantX);
-    }
-
-    private LinearToLogarithmicIndexing(val: number, min: number, max: number) {
-        //A reflection of the exponential functional.
-        return min * (((max - min) / this.ZoomConstantX) * (Math.log2(val) / Math.log2(max / min)) + min);
-    }
-
-    private InterpolateValue(index: number, array: Float32Array) {
-        let lowIndex = Math.floor(index);
-        let highIndex = Math.ceil(index);
-        let lowValue = array[lowIndex];
-        let highValue = array[highIndex];
-        let scalingFactor = highIndex === lowIndex ? 0 : (index - lowIndex) / (highIndex - lowIndex);
-        return lowValue + (highValue - lowValue) * scalingFactor;
-    }
-
-    private Draw(): void {
+    private Draw(transform: SamplingTransform): void {
         let context = this._canvas.getContext('2d');
         if (context)
         {
             let data = this._GetData();
             context.clearRect(0, 0, this._canvas.width, this._canvas.height);
+            context.fillStyle = '#F90';
             let barWidth = this._canvas.width / data.length;
-            for (let i = 1; i < data.length / this.ZoomConstantX; i++)
+            for (let i = 1; i < data.length; i++)
             {
-                //down-scaled linear sampling for testing
-                //let barHeight = this.InterpolateValue((i * 2/3) + (1/3), data) * Math.pow(2, this.ZoomConstantY) + 90 * Math.pow(2, this.ZoomConstantY);
-
-                let barHeight = 
-                    (
-                        this.InterpolateValue(
-                            this.LinearToExponentialIndexing(i, 1, data.length), 
-                            data
-                        ) 
-                        + 90
-                    ) 
-                    * Math.pow(2, this.ZoomConstantY);
-
+                let barHeight = (transform(i, data) + 90) * Math.pow(2, this.ZoomConstantY);
                 let fillX = i * barWidth;
-                let fillY = this._canvas.height - barHeight;
-                context.fillStyle = '#F90';
+                let fillY = this._canvas.height - barHeight;               
                 context.fillRect(fillX, fillY, barWidth, barHeight);
             }
         }
-        this._cancellationToken = requestAnimationFrame(this.Draw.bind(this));
+        this._cancellationToken = requestAnimationFrame(this.Draw.bind(this, transform));
     }
 
-    public Start(): void {
-        this.Draw();
+    public Start(transform: SamplingTransform): void {
+        this.Draw(transform);
     }
 
     public Stop(): void {
