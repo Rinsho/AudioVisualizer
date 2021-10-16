@@ -93,6 +93,9 @@ export function SetupProgressBar(audioSource) {
         let targetPercent = (mouseEvent.clientX - playerProgressBar.offsetLeft) / playerProgressBar.offsetWidth;
         audioSource.Seek(audioSource.GetDuration() * targetPercent);
     });
+    audioSource.addEventListener('audioEnded', (event) => {
+        audioSource.Reset();
+    });
 }
 export function SetupFileChooser(audioSource) {
     document.getElementById('audio-file').addEventListener('change', (event) => {

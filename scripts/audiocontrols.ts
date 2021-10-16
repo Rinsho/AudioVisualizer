@@ -136,6 +136,12 @@ export function SetupProgressBar(audioSource: AudioSource) {
             audioSource.Seek(audioSource.GetDuration() * targetPercent);
         }
     );
+    audioSource.addEventListener(
+        'audioEnded',
+        (event: Event) => {
+            audioSource.Reset();
+        }
+    )
 }
 
 export function SetupFileChooser(audioSource: AudioSource) {
