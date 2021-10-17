@@ -14,7 +14,10 @@ export function SetupAnimator(audioSource, animator) {
         audioSource.removeEventListener('audioStarted', animatorSampling);
         switch (option.value) {
             case 'linear':
-                animatorSampling = () => animator.Start(LinearSampling);
+                animatorSampling = () => animator.Start(LinearSampling.bind(null, 1));
+                break;
+            case 'downscaled-linear':
+                animatorSampling = () => animator.Start(LinearSampling.bind(null, 0.5));
                 break;
             default:
                 animatorSampling = () => animator.Start(ExponentialSampling);

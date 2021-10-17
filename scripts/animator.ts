@@ -25,8 +25,8 @@ export function ExponentialSampling(index: number, data: Float32Array) {
     return InterpolateValue(LinearToExponentialIndexing(index, 1, data.length), data);
 }
 
-export function LinearSampling(index: number, data: Float32Array) {
-    return data[index];
+export function LinearSampling(scaling: number, index: number, data: Float32Array) {
+    return InterpolateValue(index * scaling, data);
 }
 
 export class Animator extends EventTarget {

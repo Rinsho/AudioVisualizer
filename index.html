@@ -28,8 +28,9 @@
                 <div>
                     <p><label for="sampling-function">Sampling:</label></p>
                     <select name="sampling-function" id="sampling-function">
-                        <option value="linear">Standard</option>
-                        <option value="exponential" selected>Custom</option>
+                        <option value="linear" title="Raw FFT dump.">Standard</option>
+                        <option value="downscaled-linear" title="Standard sampling scaled down 50%.">Downscaled Standard</option>
+                        <option value="exponential" title="Custom non-linear sampling." selected>Custom</option>
                     </select>
                 </div>
                 <div>

@@ -18,8 +18,8 @@ function LinearToLogarithmicIndexing(val, min, max) {
 export function ExponentialSampling(index, data) {
     return InterpolateValue(LinearToExponentialIndexing(index, 1, data.length), data);
 }
-export function LinearSampling(index, data) {
-    return data[index];
+export function LinearSampling(scaling, index, data) {
+    return InterpolateValue(index * scaling, data);
 }
 export class Animator extends EventTarget {
     constructor(_canvas, _GetData) {
